@@ -4,6 +4,7 @@ import os
 import requests
 from tqdm import tqdm
 
+
 class XenoCantoRecord():
 
     def __init__(self, d):
@@ -28,7 +29,7 @@ class XenoCantoRecord():
         self.downloadFileName = '{}.{}'.format(self, self.audioFormat)
 
         if '/' in self.downloadFileName:
-            raise Exception('Bad filename: {}'.format(self.downloadFileName)
+            raise Exception('Bad filename: {}'.format(self.downloadFileName))
 
     def __repr__(self):
         values = self.gen, self.sp, self.id, self.q, self.type
@@ -124,30 +125,33 @@ def xenoCantoQuery(query, download=False, forceDownload=False,
                     continue
 
                 nDownloaded += 1
-            
+
             if nDownloaded >= maxNDownloads:
                 print('Reached maximum number of files to download.')
                 break
+
 
 if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(
-        description=
-            'Search for bird song recordings from '
-            'https://www.xeno-canto.org that match a query.')
+        description='Search for bird song recordings from '
+        'https://www.xeno-canto.org that match a query.')
+    
     parser.add_argument(
         '-q',
         '--query',
         help='Query. See https://www.xeno-canto.org/help/search for details. '
              'Example: "gen: columba sp: palumbus q > : C"',
         dest='query')
+    
     parser.add_argument(
         '-d',
         '--download',
         help='Download records that match the query.',
         action='store_true',
         dest='download')
+    
     parser.add_argument(
         '-m',
         '--max-file-size',
@@ -155,6 +159,7 @@ if __name__ == '__main__':
         type=int,
         dest='maxSize',
         default=500000)
+    
     parser.add_argument(
         '-n',
         '--max-number-downloads',
@@ -162,6 +167,7 @@ if __name__ == '__main__':
         type=int,
         dest='maxNDownloads',
         default=50)
+    
     parser.add_argument(
         '-p',
         '--directory',
