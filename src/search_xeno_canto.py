@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import re
 import requests
 from tqdm import tqdm
 
@@ -76,6 +77,26 @@ class XenoCantoRecord():
                 self.fileUrl))
 
 
+regex = re.compile('sp:[a-z]+', re.IGNORECASE)
+def removeSp(query):
+    """
+    Remove sp from query if one is specified. Return the query without the
+    sp, and sp
+
+    @param query. Str. Xeno-canto query
+    """
+    match = regex.search(query)
+    
+    if match:
+        group = match.group()
+        query = query.replace(group, '').rstrip().lstrip()
+        sp = group.replace('sp:', '')
+
+    else:
+        sp = str()
+
+    return query, sp
+
 def xenoCantoQuery(query, download=False, forceDownload=False,
                    directory=None, maxSize=500000, maxNDownloads=100):
     """
@@ -88,6 +109,11 @@ def xenoCantoQuery(query, download=False, forceDownload=False,
     @param maxSize. Int. Don't download if the file would be larger than
         maxSize bytes.
     """
+    # XC queries cannot contain species
+    # Check sp manually later and only print / download if it matches
+    # Separate sp from rest of query here with removeSp
+    query, sp = removeSp(query)
+
     response = requests.get(
         url='http://www.xeno-canto.org/api/2/recordings',
         params=dict(query=query))
@@ -108,6 +134,9 @@ def xenoCantoQuery(query, download=False, forceDownload=False,
             except Exception as err:
                 print(err)
                 print('Skipping...')
+                continue
+
+            if xcRecord.sp != sp:
                 continue
 
             print('{}/{}: {}'.format(i + 1, nRecordings, xcRecord.__repr__()))

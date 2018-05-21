@@ -3,3 +3,9 @@
 .vscode
 download.log
 downloads
+convert-split.log
+samples
+__pycache__
+data
+training
+n_download.txt

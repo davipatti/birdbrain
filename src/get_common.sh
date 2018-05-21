@@ -4,11 +4,11 @@ while read query
 do
     echo "$query"
     echo
-    search-xeno-canto.py --download \
+    search_xeno_canto.py --download \
                          --query "$query" \
-                         --max-file-size 500000 \
+                         --max-file-size 600000 \
                          --directory downloads \
                          --max-number-downloads 1000
     echo
     echo
-done < common.txt
+done < common2.txt

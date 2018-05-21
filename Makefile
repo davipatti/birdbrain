@@ -8,3 +8,6 @@ small:
 
 common:
 	get_common.sh
+
+convert-split:
+	parallel convert-split.sh ::: downloads/*.mpeg
