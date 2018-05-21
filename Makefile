@@ -10,4 +10,5 @@ common:
 	get_common.sh
 
 convert-split:
-	parallel convert-split.sh ::: downloads/*.mpeg
+	./src/mpeg-to-wav.sh
+	./src/split-wav.sh
