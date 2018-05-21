@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+'''
+Code for searching the https://www.xeno-canto.org/ database with a query
+and optionally downloading the recordings that match.
+'''
+
 import os
 import re
 import requests
@@ -9,9 +14,9 @@ from tqdm import tqdm
 class XenoCantoRecord():
 
     def __init__(self, d):
-        """
+        '''
         @param d: Dict
-        """
+        '''
         self.d = d
 
         # Copy main attributes in the record
@@ -44,12 +49,12 @@ class XenoCantoRecord():
         return int(self.response.headers['Content-Length'])
 
     def download(self, maxSize, directory, force=False):
-        """
+        '''
         @param maxSize. Int. Only download if file is smaller than max size.
             (Number of bytes).
         @param force. Bool. Download file if it already exists.
         @param directory. Str. Directory to save file in.
-        """
+        '''
         OK = self.response.status_code == 200
         fileSize = len(self)
         small = fileSize < maxSize
@@ -79,12 +84,14 @@ class XenoCantoRecord():
 
 regex = re.compile('sp:[a-z]+', re.IGNORECASE)
 def removeSp(query):
-    """
+    '''
     Remove sp from query if one is specified. Return the query without the
-    sp, and sp
+    sp, and sp.
+
+    This is useful because Xeno-canto queries cannot specify a species.
 
     @param query. Str. Xeno-canto query
-    """
+    '''
     match = regex.search(query)
     
     if match:
@@ -99,7 +106,7 @@ def removeSp(query):
 
 def xenoCantoQuery(query, download=False, forceDownload=False,
                    directory=None, maxSize=500000, maxNDownloads=100):
-    """
+    '''
     @param query. Str. Xeno canto search query.
         See https://www.xeno-canto.org/help/search for details.
         Example: "gen: columba sp: palumbus q > : C"'
@@ -108,7 +115,7 @@ def xenoCantoQuery(query, download=False, forceDownload=False,
     @param directory. Str. Directory to save download in.
     @param maxSize. Int. Don't download if the file would be larger than
         maxSize bytes.
-    """
+    '''
     # XC queries cannot contain species
     # Check sp manually later and only print / download if it matches
     # Separate sp from rest of query here with removeSp
@@ -125,7 +132,7 @@ def xenoCantoQuery(query, download=False, forceDownload=False,
         nDownloaded = 0
         nRecordings = int(json['numRecordings'])
 
-        print("Found {} recordings".format(nRecordings))
+        print('Found {} recordings'.format(nRecordings))
 
         for i, r in enumerate(json['recordings']):
 
