@@ -23,7 +23,7 @@ To use the shell scripts for downloading and processing data, and training a mod
 
 * `BIRDBRAIN_ROOT` should point to this repositories root directory.
 * `TENSORFLOW_SRC_ROOT` should point to the tensor flow source code root directory.
-* `BACKGROUND_NOISE` should point to the `_background_noise_` which is downloadable from [here](download.tensorflow.org/data/speech_commands_v0.02.tar.gz).
+* `BACKGROUND_NOISE` should point to the `_background_noise_` directory which is downloadable from [here](download.tensorflow.org/data/speech_commands_v0.02.tar.gz).
 
 ## Download recordings
 
