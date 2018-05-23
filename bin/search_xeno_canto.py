@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-'''
+"""
 Code for searching the https://www.xeno-canto.org/ database with a query
 and optionally downloading the recordings that match.
-'''
+"""
 
 import os
 import re
@@ -12,11 +12,10 @@ from tqdm import tqdm
 
 
 class XenoCantoRecord():
+    """A xeno-canto recording."""
 
     def __init__(self, d):
-        '''
-        @param d: Dict
-        '''
+        """@param d: Dict"""
         self.d = d
 
         # Copy main attributes in the record
@@ -38,23 +37,26 @@ class XenoCantoRecord():
             raise Exception('Bad filename: {}'.format(self.downloadFileName))
 
     def __repr__(self):
+        """All the main attributes"""
         values = self.gen, self.sp, self.id, self.q, self.type
         return ' '.join(values)
 
     def __str__(self):
+        """All the main attributes"""
         values = self.gen, self.sp, self.id, self.q, self.type
         return '.'.join(values)
 
     def __len__(self):
+        """Size record in bytes"""
         return int(self.response.headers['Content-Length'])
 
     def download(self, maxSize, directory, force=False):
-        '''
+        """
         @param maxSize. Int. Only download if file is smaller than max size.
             (Number of bytes).
         @param force. Bool. Download file if it already exists.
         @param directory. Str. Directory to save file in.
-        '''
+        """
         OK = self.response.status_code == 200
         fileSize = len(self)
         small = fileSize < maxSize
@@ -83,17 +85,19 @@ class XenoCantoRecord():
 
 
 regex = re.compile('sp:[a-z]+', re.IGNORECASE)
-def removeSp(query):
-    '''
+
+
+def remove_sp(query):
+    """
     Remove sp from query if one is specified. Return the query without the
     sp, and sp.
 
     This is useful because Xeno-canto queries cannot specify a species.
 
     @param query. Str. Xeno-canto query
-    '''
+    """
     match = regex.search(query)
-    
+
     if match:
         group = match.group()
         query = query.replace(group, '').rstrip().lstrip()
@@ -104,9 +108,10 @@ def removeSp(query):
 
     return query, sp
 
-def xenoCantoQuery(query, download=False, forceDownload=False,
-                   directory=None, maxSize=500000, maxNDownloads=100):
-    '''
+
+def xeno_canto_query(query, download=False, forceDownload=False,
+                     directory=None, maxSize=500000, maxNDownloads=100):
+    """
     @param query. Str. Xeno canto search query.
         See https://www.xeno-canto.org/help/search for details.
         Example: "gen: columba sp: palumbus q > : C"'
@@ -115,11 +120,11 @@ def xenoCantoQuery(query, download=False, forceDownload=False,
     @param directory. Str. Directory to save download in.
     @param maxSize. Int. Don't download if the file would be larger than
         maxSize bytes.
-    '''
+    """
     # XC queries cannot contain species
     # Check sp manually later and only print / download if it matches
-    # Separate sp from rest of query here with removeSp
-    query, sp = removeSp(query)
+    # Separate sp from rest of query here with remove_sp
+    query, sp = remove_sp(query)
 
     response = requests.get(
         url='http://www.xeno-canto.org/api/2/recordings',
@@ -173,21 +178,21 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Search for bird song recordings from '
         'https://www.xeno-canto.org that match a query.')
-    
+
     parser.add_argument(
         '-q',
         '--query',
         help='Query. See https://www.xeno-canto.org/help/search for details. '
              'Example: "gen: columba sp: palumbus q > : C"',
         dest='query')
-    
+
     parser.add_argument(
         '-d',
         '--download',
         help='Download records that match the query.',
         action='store_true',
         dest='download')
-    
+
     parser.add_argument(
         '-m',
         '--max-file-size',
@@ -195,7 +200,7 @@ if __name__ == '__main__':
         type=int,
         dest='maxSize',
         default=500000)
-    
+
     parser.add_argument(
         '-n',
         '--max-number-downloads',
@@ -203,7 +208,7 @@ if __name__ == '__main__':
         type=int,
         dest='maxNDownloads',
         default=50)
-    
+
     parser.add_argument(
         '-p',
         '--directory',
@@ -212,7 +217,7 @@ if __name__ == '__main__':
         default='downloads')
     args = parser.parse_args()
 
-    xenoCantoQuery(
+    xeno_canto_query(
         query=args.query,
         download=args.download,
         directory=args.directory,
