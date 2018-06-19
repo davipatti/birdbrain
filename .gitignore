@@ -1,11 +1,8 @@
-.DS_Store
-.ipynb_checkpoints
-.vscode
-download.log
-downloads
-convert-split.log
-samples
 __pycache__
-data
+*.log
+*.mpeg
+*.wav
 training
 n_download.txt
+data/downloads
+data/samples

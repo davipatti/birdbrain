@@ -10,7 +10,7 @@
 while read QUERY; do
 
     echo "$QUERY"
-    "$BIRDBRAIN_ROOT"/src/search_xeno_canto.py --download \
+    "$BIRDBRAIN_ROOT"/bin/search_xeno_canto.py --download \
                                                --query "$QUERY" \
                                                --max-file-size 600000 \
                                                --directory "$BIRDBRAIN_ROOT"/data/downloads \
