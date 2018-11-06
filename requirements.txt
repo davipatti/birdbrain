@@ -10,7 +10,7 @@ idna==2.6
 Markdown==2.6.11
 numpy==1.14.3
 protobuf==3.5.2.post1
-requests==2.18.4
+requests>=2.20.0
 six==1.11.0
 tensorboard==1.8.0
 tensorflow==1.8.0
